@@ -106,6 +106,7 @@ document.body.appendChild( renderer.domElement );
 let invocationCounter = 0;
 let invocationCounter2 = 0;
 let invocationCounter3 = 0;
+let invocationCounter4 = 0;
 
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
@@ -249,7 +250,7 @@ const createMesh = function () {
 		invocationCounter2++;
 	}
 
-	if(invocationCounter2 >= 14 && invocationCounter3 < 20)
+	if((invocationCounter2 >= 14 && invocationCounter3 < 20) || invocationCounter4 < 20)
 	{
 		removeAllObjects();
 
@@ -272,7 +273,14 @@ const createMesh = function () {
 		}
 
 		obj2.rotation.z = Math.PI / 2 + angle;
-		obj2.position.x = circleData.x - invocationCounter3;
+		obj2.position.x = circleData.x;
+
+		if(invocationCounter3 >= 20)
+		{
+			obj2.position.x = circleData.x - invocationCounter4 / 20 * 20;
+			invocationCounter4++;
+		}
+	
 		obj2.position.y = circleData.y;
 		obj2.position.z = circleData.z;
 		obj2.geometry.center();
@@ -292,9 +300,25 @@ const createMesh = function () {
 		const obj = scene.getObjectByName('name2');
 		obj.rotation.x = Math.PI;
 		obj.position.y += (12 - invocationCounter/20 * 10);
-		obj.position.y += (invocationCounter3 * 2) / 10 * 1.8;
+		if(invocationCounter3 <= 10)
+		{
+			obj.position.y += (invocationCounter3 * 1.5) / 10 * 1;
+		}
 
-		invocationCounter3++;
+		else
+		{
+			obj.position.y += 1.5;
+		}
+
+		if(invocationCounter3 < 20)
+		{
+			invocationCounter3++;
+		}
+
+		else
+		{
+			invocationCounter4++;
+		}
 	}
 }
 
@@ -341,7 +365,6 @@ const animate = function () {
 	requestAnimationFrame( animate );
 
 	// controls.update();
-	console.log(camera.rotation, camera.position);
 
 	renderer.render( scene, camera );
 };
