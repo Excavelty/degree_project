@@ -50,7 +50,7 @@ export class ToroidToMugAnimation extends Animation
             this.stepShrinkTopRotateCylinders();
         }
 
-        if((this.counters[1] >= 14 && this.counters[2] < 20) || this.counters[3] < 20)
+        if((this.counters[1] >= 14 && this.counters[2] < 20) || (this.counters[3] < 20 && this.counters[0] >= 20))
         {
             this.stepAdjustHandleMoveCylinder();
         }
@@ -59,7 +59,6 @@ export class ToroidToMugAnimation extends Animation
     /* @override */
     begin(speed)
     {
-        console.log(this.counters);
         window.setInterval(this.doStep.bind(this), speed);
     }
 
@@ -88,10 +87,15 @@ export class ToroidToMugAnimation extends Animation
         if(isNaN(angle))
         {
             angle = 0;
+            obj2.rotation.z = Math.PI;
+            obj2.position.x = this.circleData.x - 2;
         }
 
-        obj2.rotation.z = Math.PI / 2 + angle + 0.4 * (10 - this.counters[0]) / 9;
-        obj2.position.x = this.circleData.x;
+        else
+        {
+            obj2.rotation.z = Math.PI / 2 + angle + 0.2 * (10 - this.counters[0]) / 9;
+            obj2.position.x = this.circleData.x;
+        }
         obj2.position.y = this.circleData.y;
         obj2.position.z = this.circleData.z;
         obj2.geometry.center();
@@ -102,7 +106,7 @@ export class ToroidToMugAnimation extends Animation
 
         const obj3 = this.scene.getObjectByName('name4');
         obj3.rotation.z = -obj2.rotation.z;
-        obj3.position.x = -this.circleData.x
+        obj3.position.x = -obj2.position.x;
         obj3.position.y = this.circleData.y;
         obj3.position.z = this.circleData.z;
 
@@ -234,7 +238,7 @@ export class ToroidToMugAnimation extends Animation
     }
 
     parametrizedFunction(c, d, target) {
-        const u = 0.68 + 0.32 * (this.counters[0] / 20.);
+        const u = 0.678 + 0.32 * (this.counters[0] / 20.);
         const a = 2 * Math.PI * c;
         const t = ((Math.PI - a) * u + a);
         const fi = 2 * Math.PI * d;

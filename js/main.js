@@ -1,4 +1,4 @@
-import {SceneController} from './SceneController.js';
+import { SceneController } from './SceneController.js';
 import { ToroidToMugAnimation } from './animations/ToroidToMugAnimation.js';
 
 const scene = new THREE.Scene();
