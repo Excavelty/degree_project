@@ -6,11 +6,13 @@ scene.background = new THREE.Color( 0xdddddd );
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+const canvasElement = document.querySelector('.canvasElement');
+renderer.canvas = canvasElement
+renderer.setSize( window.innerWidth * 0.8, window.innerHeight * 0.8);
+canvasElement.appendChild( renderer.domElement );
 
-const axesHelper = new THREE.AxesHelper(5);
-scene.add(axesHelper);
+// const axesHelper = new THREE.AxesHelper(5);
+// scene.add(axesHelper);
 
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.update();
@@ -27,6 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	const controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.update();
 
+	scene.background = new THREE.Color(0xaaaaaa);
+
 	const sceneController = SceneController.FromSceneCameraAndOrbitControls(scene, camera, controls);
 
 	sceneController.setCameraPosition(new THREE.Vector3(32.39511881197365, -8.31, 10.32));
@@ -39,7 +43,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	const animation = new ToroidToMugAnimation(scene);
 
 	sceneController.loadAnimation(animation);
-	sceneController.startAnimation(100);
+    sceneController.startAnimation(1000);
+		
 
-	animate();
+
+	// camera.position.z = 25;
+
+		animate();
 });
