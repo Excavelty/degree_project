@@ -1,5 +1,5 @@
 import { SceneController } from './SceneController.js';
-import { ToroidToMugAnimation } from './animations/ToroidToMugAnimation.js';
+import { HookedLoopsToTwoRingsAnimation } from './animations/HookedLoopsToTwoRingsAnimation.js';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color( 0xdddddd );
@@ -10,9 +10,6 @@ const canvasElement = document.querySelector('.canvasElement');
 renderer.canvas = canvasElement
 renderer.setSize( window.innerWidth * 0.8, window.innerHeight * 0.8);
 canvasElement.appendChild( renderer.domElement );
-
-// const axesHelper = new THREE.AxesHelper(5);
-// scene.add(axesHelper);
 
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.update();
@@ -40,14 +37,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	sceneController.addPointLight(0xffffff, 1., new THREE.Vector3(-25, 25, 0));
 	sceneController.addPointLight(0xffffff, 1., new THREE.Vector3(25, -25, 0));
 
-	const animation = new ToroidToMugAnimation(scene);
+	const animation = new HookedLoopsToTwoRingsAnimation(scene);
 
 	sceneController.loadAnimation(animation);
     sceneController.startAnimation(100);
 		
-
-
 	// camera.position.z = 25;
 
-		animate();
+	animate();
 });
