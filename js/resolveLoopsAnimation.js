@@ -30,8 +30,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	const sceneController = SceneController.FromSceneCameraAndOrbitControls(scene, camera, controls);
 
-	sceneController.setCameraPosition(new THREE.Vector3(32.39511881197365, -8.31, 10.32));
-	sceneController.setCameraRotation(new THREE.Vector3(0.68, 1.18, -0.64));
+	//sceneController.setCameraPosition(new THREE.Vector3(32.39511881197365, -8.31, 10.32));
+	//sceneController.setCameraRotation(new THREE.Vector3(0.68, 1.18, -0.64));
 
 	sceneController.addPointLight(0xffffff, 1., new THREE.Vector3(25, 25, 0));
 	sceneController.addPointLight(0xffffff, 1., new THREE.Vector3(-25, 25, 0));
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	sceneController.loadAnimation(animation);
     sceneController.startAnimation(100);
 		
-	// camera.position.z = 25;
+	camera.position.z = 25;
 
 	animate();
 });
