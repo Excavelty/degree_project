@@ -15,4 +15,12 @@ export class MathHelper
 
         return distance;
     }
+
+    static GetRotationQuaternion(axisUnitVector, rotation)
+    {
+        const quaternion = new THREE.Quaternion();
+        quaternion.setFromAxisAngle(axisUnitVector, rotation);
+
+        return quaternion;
+    }
 }
