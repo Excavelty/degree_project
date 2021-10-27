@@ -45,9 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	sceneController.loadAnimation(animation);
     sceneController.startAnimation(100);
 		
-
-
 	// camera.position.z = 25;
 
-		animate();
+	animate();
 });

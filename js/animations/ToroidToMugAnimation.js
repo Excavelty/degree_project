@@ -1,14 +1,29 @@
 import { Animation } from "./Animation.js";
 import { MathHelper } from "../utility/MathHelper.js";
 
+/*
+    Class for handling animation of resolving torus-like geometry (genus=1 closed loop)
+    into mug-like object. It is visualization of one of the most popular topological
+    homeomorphisms.
+
+    Parametrization of resolving torus-like object (loop) into straight cylinder originated from the following article:
+    https://analyticphysics.com/Mathematical%20Methods/Transforming%20a%20Torus%20into%20a%20Cylinder.htm
+
+*/
+
 export class ToroidToMugAnimation extends Animation
 {
+    /*
+        Constructor of the class will pass the scene to class field.
+        Not handling of scene in parent class is caused by backward compatibility and need of several changes during potential refactoring.
+    */    
     constructor(scene)
     {
-        super(scene);
         this.scene = scene;
 
+        /* Initialize array of counters which will be helpful in indicating current step of animation/ */
         this.stepsNumber = 4;
+      
         this.counters = new Array(4);
         
         for(let i = 0; i < 4; ++i)
@@ -16,6 +31,8 @@ export class ToroidToMugAnimation extends Animation
             this.counters[i] = 0;
         }
 
+
+        /* Initialize structures to hold data useful to indicate tangent angle and position of mugs base - bottoms ("flat" cylinders) */
         this.circleData = {
             radius: 0,
             x: 0,
@@ -23,11 +40,13 @@ export class ToroidToMugAnimation extends Animation
             z: 0
         }
         
+        /* Farthest point of bottom base-cylinder is in 0X+ direction */
         this.farthestPoint = {
             x: 0,
             y: 0
         }
         
+        /* Farthest point of object in 0Y+ direction */
         this.highestPoint = {
             x: 0,
             y: 0
@@ -38,6 +57,10 @@ export class ToroidToMugAnimation extends Animation
     }
 
     /* @override */
+    /* 
+        Counter's ranges are adjusted by hand depending on the behavior of animation 
+        Function is responsible for invoking in specific frame creating proper parametrization.
+    */
     doStep()
     {
         if(this.counters[0] < 20)
@@ -57,18 +80,24 @@ export class ToroidToMugAnimation extends Animation
     }
 
     /* @override */
-    begin(speed)
+    /* This function triggers animation with interval between frames specifiend in ms in frequency parameter. */
+    begin(frequency)
     {
-        window.setInterval(this.doStep.bind(this), speed);
+        window.setInterval(this.doStep.bind(this), frequency);
     }
 
+    /* 
+        This step is responsible for most important part of animation: using parametrization to animate resolving lower part of torus into cylynder
+    */
     stepResolveToCylinder()
     {
         this.removeAllObjects(this.scene);
 
+        /* Add both parts of torus to scene */
         this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedFunction.bind(this), 40, 40 ), new THREE.MeshLambertMaterial( { color: 0xff0000 } ), "name1", this.scene);
         this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedUpper.bind(this), 40, 40 ), new THREE.MeshLambertMaterial( { color: 0xff0000 } ), "name2", this.scene);	
 
+        /* Add base-cylinder and calculate its tangent angle using cosinus theorem */
         const geometry = new THREE.CylinderGeometry(this.circleData.radius, this.circleData.radius, 1, 32, 32);
 
         this.addObjectToScene(geometry, new THREE.MeshLambertMaterial( { color: 0xff0000 } ), 'name3', this.scene);
@@ -100,6 +129,7 @@ export class ToroidToMugAnimation extends Animation
         obj2.position.z = this.circleData.z;
         obj2.geometry.center();
 
+        /* Add second cylinder and set its position and angle based on the position of the first cylinder. */
         const repeatedCylinderGeometry = new THREE.CylinderGeometry(this.circleData.radius, this.circleData.radius, 1, 32, 32);
             
         this.addObjectToScene(repeatedCylinderGeometry, new THREE.MeshLambertMaterial( { color: 0xff0000 } ), 'name4', this.scene);
@@ -119,13 +149,20 @@ export class ToroidToMugAnimation extends Animation
         this.counters[0]++;
     }
 
+    /* 
+        Function is responsible for medium step of the animation. It will keep shrinking top part of torus to make it look like mug handle. It will also take care of
+        rotation base cylinders so it will prevent creation of unwanted empty spaces and will enable keeping consistency of animated object. 
+    */    
     stepShrinkTopRotateCylinders()
     {
+        // Removing all objects from scene */
         this.removeAllObjects(this.scene);
 
+        /* Add both parts of torus to scene */
 		this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedFunction.bind(this), 40, 40 ), new THREE.MeshLambertMaterial( { color: 0xff0000 } ), "name1", this.scene);
 		this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedUpperFinish.bind(this), 40, 40 ), new THREE.MeshLambertMaterial( { color: 0xff0000 } ), "name2", this.scene);	
 
+        /* Add base-cylinder and apply its tangent angle based on cosinus theorem */
 		const geometry = new THREE.CylinderGeometry(this.circleData.radius, this.circleData.radius, 1, 32, 32);
 
 		this.addObjectToScene(geometry, new THREE.MeshLambertMaterial( { color: 0xff0000 } ), 'name3', this.scene);
@@ -147,6 +184,7 @@ export class ToroidToMugAnimation extends Animation
 		obj2.position.z = this.circleData.z;
 		obj2.geometry.center();
 
+        /* Add second base-cylinder based on position and rotation of the first base-cylinder. */
 		const repeatedCylinderGeometry = new THREE.CylinderGeometry(this.circleData.radius, this.circleData.radius, 1, 32, 32);
 		
 		this.addObjectToScene(repeatedCylinderGeometry, new THREE.MeshLambertMaterial( { color: 0xff0000 } ), 'name4', this.scene);
@@ -163,34 +201,46 @@ export class ToroidToMugAnimation extends Animation
 		obj.rotation.x = Math.PI;
 		obj.position.y += (12 - this.counters[0]/20 * 10);
 
+        /* Increase the counter. */
 		this.counters[1]++;
     }
 
+    /* 
+        This function will be responsible for handling final part of animation.
+        It will adjust handle of the mug and will later move the cylinder to "create" space inside mug to give it a look of "real" mug.
+    */
     stepAdjustHandleMoveCylinder()
     {
+        // Remove objects from scene*/
         this.removeAllObjects(this.scene);
 
+        /* Adding to scene parametrization for upper and bottom parts of torus changing into a mug.  */
 		this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedFunction.bind(this), 40, 40 ), new THREE.MeshLambertMaterial( { color: 0xff0000 } ), "name1", this.scene);
 		this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedUpperFinish.bind(this), 40, 40 ), new THREE.MeshLambertMaterial( { color: 0xff0000 } ), "name2", this.scene);	
 
+        /* Create geometry for base (bottom) cylinder and add it to scene*/
 		const geometry = new THREE.CylinderGeometry(this.circleData.radius, this.circleData.radius, 1, 32, 32);
 
 		this.addObjectToScene(geometry, new THREE.MeshLambertMaterial( { color: 0xff0000 } ), 'name3', this.scene);
 
+        /* Calculate tangent angle of the bottom-cylinder using consinus theorem. */
 		const obj2 = this.scene.getObjectByName('name3');
 		this.circleData.x = this.highestPoint.x + (this.farthestPoint.x - this.highestPoint.x) / 2.;
 		this.circleData.y = this.farthestPoint.y + Math.abs(this.farthestPoint.y - this.highestPoint.y) / 2;
 		const cosAngle = MathHelper.CosinusTheorem(this.circleData.radius, MathHelper.DistanceBtwPoints(this.circleData, this.highestPoint), Math.abs(this.circleData.x - this.highestPoint.x));
 		let angle = Math.acos(cosAngle);
 
+        /* In case angle is not a number, then indicate its rotation is Math.PI / 2 */
 		if(isNaN(angle))
 		{
 			angle = Math.PI / 2;
 		}
 
+        /* Set rotation and position of the base-cylinder */
 		obj2.rotation.z = Math.PI / 2 + angle;
 		obj2.position.x = this.circleData.x;
 
+        /* In proper moment - proceed with moving one of the cylinders to create interior of the mug */
 		if(this.counters[2] >= 20)
 		{
 			obj2.position.x = this.circleData.x - this.counters[3] / 20 * 20;
@@ -201,6 +251,9 @@ export class ToroidToMugAnimation extends Animation
 		obj2.position.z = this.circleData.z;
 		obj2.geometry.center();
 
+        /* 
+            Create second base-cylinder and set its position based on the position of the first cylinder.
+        */
 		const repeatedCylinderGeometry = new THREE.CylinderGeometry(this.circleData.radius, this.circleData.radius, 1, 32, 32);
 		
 		this.addObjectToScene(repeatedCylinderGeometry, new THREE.MeshLambertMaterial( { color: 0xff0000 } ), 'name4', this.scene);
@@ -213,6 +266,7 @@ export class ToroidToMugAnimation extends Animation
 
 		this.circleData.x = this.circleData.y = this.circleData.z = this.maxY = this.maxX = this.circleData.radius = this.highestPoint.x = this.highestPoint.y = this.farthestPoint.x = this.farthestPoint.y = Number.NEGATIVE_INFINITY;
 
+        /* Access mug's handle element and move it not to loose object's consistency.*/
 		const obj = this.scene.getObjectByName('name2');
 		obj.rotation.x = Math.PI;
 		obj.position.y += (12 - this.counters[0]/20 * 10);
@@ -226,6 +280,8 @@ export class ToroidToMugAnimation extends Animation
 			obj.position.y += 1.5;
 		}
 
+        /* Increment animation counters when needed to make smooth animation. */
+
 		if(this.counters[2] < 20)
 		{
 			this.counters[2]++;
@@ -237,6 +293,13 @@ export class ToroidToMugAnimation extends Animation
 		}
     }
 
+    /*
+        Function proving parametrization for most critical part of animated object.
+        The parametrization will result in drawing part of torus-like object at the very beggining and will be later "resolved"
+        using equation originating from circle's evolvent into cylinder-like object (main part of a mug).
+
+        Secondary responsibility of the function is to find parameters needed later for calculating tangent angle of cylinder bases during animation (bottoms of resolved object).
+    */
     parametrizedFunction(c, d, target) {
         const u = 0.678 + 0.32 * (this.counters[0] / 20.);
         const a = 2 * Math.PI * c;
@@ -271,6 +334,10 @@ export class ToroidToMugAnimation extends Animation
         target.set(x, y, z);
     }
 
+    /*
+        Function providing parametrization for upper part of animated object.
+        it is just part of torus-like object which will be moved down Y-axis to behave as handle of a mug appearing during animation.
+    */
     parametrizedUpper(c, d, target)
     {
         const u = 0.68;
@@ -291,6 +358,10 @@ export class ToroidToMugAnimation extends Animation
         target.set(x, y, z);
     }
 
+    /* 
+        Function providing parametrization for upper part of animated object during late part of animation 
+        This parametrization is responsible for animating adjustement of mug's handle.    
+    */
     parametrizedUpperFinish(c, d, target)
     {
         const u = 0.68;
