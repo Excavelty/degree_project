@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	const animation = new HookedLoopsToTwoRingsAnimation(scene);
 
 	sceneController.loadAnimation(animation);
-    sceneController.startAnimation(100);
+    sceneController.startAnimation(1000);
 		
 	camera.position.z = 25;
 

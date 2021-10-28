@@ -19,6 +19,7 @@ export class ToroidToMugAnimation extends Animation
     */    
     constructor(scene)
     {
+        super();
         this.scene = scene;
 
         /* Initialize array of counters which will be helpful in indicating current step of animation/ */
@@ -87,7 +88,7 @@ export class ToroidToMugAnimation extends Animation
     }
 
     /* 
-        This step is responsible for most important part of animation: using parametrization to animate resolving lower part of torus into cylynder
+        This step is responsible for most important part of animation: using parametrization to animate resolving lower part of torus into cylinder
     */
     stepResolveToCylinder()
     {
