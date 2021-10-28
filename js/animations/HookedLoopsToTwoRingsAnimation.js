@@ -5,7 +5,7 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
 {
     constructor(scene)
     {
-        super(scene);
+        super();
         this.scene = scene;
 
         this.stepsNumber = 5;
@@ -20,6 +20,29 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
     
         this.rotationChangeLoopLeft = 0;
         this.rotationChangeLoopRight = 0;
+
+        /* Initialize structures to hold data useful to indicate tangent angle and position of mugs base - bottoms ("flat" cylinders) */
+        this.circleData = {
+            radius: 0,
+            x: 0,
+            y: 0,
+            z: 0
+        }
+        
+        /* Farthest point of bottom base-cylinder is in 0X+ direction */
+        this.farthestPoint = {
+            x: 0,
+            y: 0
+        }
+        
+        /* Farthest point of object in 0Y+ direction */
+        this.highestPoint = {
+            x: 0,
+            y: 0
+        }
+        
+        this.maxY = 0;
+        this.maxX = Number.POSITIVE_INFINITY;
     }
 
     /* @override */
@@ -53,9 +76,41 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
     }
 
     /* @override */
-    begin(speed)
+    begin(frequency)
     {
-        window.setInterval(this.doStep.bind(this), speed);
+        window.setInterval(this.doStep.bind(this), frequency);
+    }
+
+    addBottomCylindersToScene()
+    {
+        this.circleData.y -= this.circleData.radius;
+
+        this.addObjectToScene(new THREE.CylinderGeometry(this.circleData.radius, this.circleData.radius, 0.2, 32), new THREE.MeshLambertMaterial( { color: this.color }), "cylinderLeft", this.scene);
+        this.addObjectToScene(new THREE.CylinderGeometry(this.circleData.radius, this.circleData.radius, 0.2, 32), new THREE.MeshLambertMaterial( { color: this.color }), "cylinderRight", this.scene);
+
+        const cylinderLeft = this.scene.getObjectByName("cylinderLeft");
+        const cylinderRight = this.scene.getObjectByName("cylinderRight");
+    
+        this.circleData.x = this.highestPoint.x - Math.abs(this.farthestPoint.x - this.highestPoint.x) / 2.;
+		this.circleData.y = this.highestPoint.y - Math.abs(this.farthestPoint.y - this.highestPoint.y) / 2;
+		const cosAngle = MathHelper.CosinusTheorem(this.circleData.radius, MathHelper.DistanceBtwPoints(this.circleData, this.highestPoint), Math.abs(this.circleData.x - this.highestPoint.x));
+		let angle = Math.acos(cosAngle);
+
+        cylinderLeft.geometry.center();
+        cylinderRight.geometry.center();
+
+        cylinderLeft.rotation.z = -(angle + Math.PI / 8);
+        cylinderRight.rotation.z = angle + Math.PI / 8;
+
+        cylinderLeft.position.x = -this.circleData.x;
+        cylinderLeft.position.y = this.circleData.y;
+        cylinderLeft.position.z = this.circleData.z;
+
+        cylinderRight.position.x = this.circleData.x;
+        cylinderRight.position.y = this.circleData.y;
+        cylinderRight.position.z = this.circleData.z;
+    
+        console.log(this.circleData.radius);
     }
 
     stepBlowToroid()
@@ -65,17 +120,8 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedFunction.bind(this), 40, 40 ), new THREE.MeshLambertMaterial( { color: this.color } ), "name1", this.scene);
         this.addObjectToScene(new THREE.SphereGeometry(0.70 * this.counters[0], 40, 40), new THREE.MeshLambertMaterial( { color: this.color } ), "ball", this.scene);
 
-        this.addObjectToScene(new THREE.CylinderGeometry(1, 1, 0.2, 32), new THREE.MeshLambertMaterial( { color: this.color }), "cylinderLeft", this.scene);
-        this.addObjectToScene(new THREE.CylinderGeometry(1, 1, 1, 32), new THREE.MeshLambertMaterial( { color: this.color }), "cylinderRight", this.scene);
-
-        const cylinderLeft = this.scene.getObjectByName("cylinderLeft");
-        const cylinderRight = this.scene.getObjectByName("cylinderRight");
-
-        cylinderLeft.rotation.z = -Math.PI / 4;
-        cylinderLeft.position.set(-2.7, 7.3, 0);
-
         const sphereObj = this.scene.getObjectByName("ball");
-        sphereObj.position.set(0, -4.2, 0);
+        sphereObj.position.set(1.3, -3.5, 0);
 
         this.counters[0]++;
     }
@@ -85,14 +131,16 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedTorusXConstants.bind(this), 40, 40), new THREE.MeshLambertMaterial( { color: this.color } ), "loop1", this.scene);
         this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedTorusXConstants.bind(this), 40, 40), new THREE.MeshLambertMaterial( { color: this.color } ), "loop2", this.scene);
 
+        this.addBottomCylindersToScene();
+
         const obj1 = this.scene.getObjectByName("loop1");
         const obj2 = this.scene.getObjectByName("loop2");
 
         obj1.position.set(-3.2, 8, 0);
         obj2.position.set(3.2, 8, 0);
 
-        //obj1.geometry.center();
-        //obj2.geometry.center();
+        obj1.geometry.center();
+        obj2.geometry.center();
 
         obj1.rotation.z = -Math.PI / 4.;
         obj2.rotation.z = Math.PI / 3.;
@@ -105,6 +153,16 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
     {
         //this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedTorusXConstants.bind(this), 40, 40), new THREE.MeshLambertMaterial( { color: this.color } ), "loop1", this.scene);
         //this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedTorusXConstants.bind(this), 40, 40), new THREE.MeshLambertMaterial( { color: this.color } ), "loop2", this.scene);
+
+        /*
+            Remove bottom cylinders as we do not need them anymore    
+        */
+
+        const cylinderLeft = this.scene.getObjectByName("cylinderLeft");
+        const cylinderRight = this.scene.getObjectByName("cylinderRight");
+
+        this.scene.remove(cylinderLeft);
+        this.scene.remove(cylinderRight);
 
         const obj1 = this.scene.getObjectByName("loop1");
         const obj2 = this.scene.getObjectByName("loop2");
@@ -140,8 +198,16 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
 
         obj1.position.x = R1 * Math.sin(angle1);
         obj1.position.y = R1 * Math.cos(angle1);
-        
-        obj2.position.x = -R2 * Math.sin(angle2);
+
+        if(0 == this.counters[2])
+        {
+            obj2.position.x = -0.8;
+        }
+
+        else
+        {
+            obj2.position.x = -R2 * Math.sin(angle2);
+        }
         obj2.position.y = R2 * Math.cos(angle2);
         
         this.counters[2]++;
@@ -222,7 +288,7 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         let y = R * (Math.cos(t) + (t - a) * Math.sin(t)) + multiplicator * (Math.cos(t) + (t - a) * (1 - u) * Math.sin(t));
         let z = r * Math.sin(fi);
     
-        if(y > this.maxY && x > 0)
+        if(y > this.maxY)
         {
             this.maxY = y;
             this.highestPoint.x = x;
@@ -231,9 +297,9 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
             this.circleData.radius = r;
         }
     
-        if(x > this.maxX)
+        if(Math.abs(x) < this.maxX && y > 2)
         {
-            this.maxX = x;
+            this.maxX = Math.abs(x);
             this.farthestPoint.x = x;
             this.farthestPoint.y = y;
         }
