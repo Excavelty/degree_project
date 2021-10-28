@@ -1,13 +1,24 @@
 import { Animation } from "./Animation.js";
 import { MathHelper } from "../utility/MathHelper.js";
 
+/*
+    Class handling animation of two conjoined loops originating from common toroid-like object.
+    It is visualization of surprising genus-2 topological object. Idea was based on an example show in video
+    'Topology Riddles': https://www.youtube.com/watch?v=H8qwqGjOlSE 
+*/
+
 export class HookedLoopsToTwoRingsAnimation extends Animation
 {
+    /*
+        Constructor of the class will pass the scene to class field.
+        Not handling of scene in parent class is caused by backward compatibility and need of several changes during potential refactoring.
+    */
     constructor(scene)
     {
         super();
         this.scene = scene;
 
+        // set number of animations steps and initialize counters
         this.stepsNumber = 5;
         this.counters = new Array(5);
 
@@ -16,6 +27,7 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
             this.counters[i] = 0;
         }
 
+        // color of animated object
         this.color = 0x0000ff;
     
         this.rotationChangeLoopLeft = 0;
@@ -29,13 +41,13 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
             z: 0
         }
         
-        /* Farthest point of bottom base-cylinder is in 0X+ direction */
+        /* Farthes point, in fact in this animation: point closest to (0, 0, 0) which have non-negative y coordinates */
         this.farthestPoint = {
             x: 0,
             y: 0
         }
         
-        /* Farthest point of object in 0Y+ direction */
+        /* Highest point of object */
         this.highestPoint = {
             x: 0,
             y: 0
@@ -81,6 +93,10 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         window.setInterval(this.doStep.bind(this), frequency);
     }
 
+    /*
+        Helper function for adding small bottom-base cylinders of main loop of animated object
+        It is calculating tangent of the cylinders based on cosinus theorem as well as hard-coded alignement
+    */
     addBottomCylindersToScene()
     {
         this.circleData.y -= this.circleData.radius;
@@ -113,6 +129,10 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         console.log(this.circleData.radius);
     }
 
+    /*
+        This step handling blowing of toroid. In fact it is animated by appearance and blowing a sphere which will eventually cover main loop and will enable unhooking
+        conjoined loops.
+    */
     stepBlowToroid()
     {
         this.removeAllObjects(this.scene);
@@ -126,6 +146,10 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         this.counters[0]++;
     }
 
+    /*
+        Helper function for drawing conjoined loops. It is adding conjoined loops to scene and sets them conjoined in first part of the animation.
+        This function also adds base cylinders to scene to give final look of initial state of animation.    
+    */
     drawStaticLoops()
     {
         this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedTorusXConstants.bind(this), 40, 40), new THREE.MeshLambertMaterial( { color: this.color } ), "loop1", this.scene);
@@ -149,15 +173,13 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         obj2.position.set(-0.5, 9, -2.4);
     }
 
+    /*
+        This step handling preparing loops for unhooking. It moves left loop to the position from which loops might be easily unhooked. It uses cosinus and sinus functions
+        for circle-like movement.
+    */
     stepMoveLoopBeforeUnhooking()
     {
-        //this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedTorusXConstants.bind(this), 40, 40), new THREE.MeshLambertMaterial( { color: this.color } ), "loop1", this.scene);
-        //this.addObjectToScene(new THREE.ParametricGeometry( this.parametrizedTorusXConstants.bind(this), 40, 40), new THREE.MeshLambertMaterial( { color: this.color } ), "loop2", this.scene);
-
-        /*
-            Remove bottom cylinders as we do not need them anymore    
-        */
-
+        /* Remove bottom cylinders as we do not need them anymore */
         const cylinderLeft = this.scene.getObjectByName("cylinderLeft");
         const cylinderRight = this.scene.getObjectByName("cylinderRight");
 
@@ -170,21 +192,23 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         obj1.position.set(-3.2, 8, 0);
         obj2.position.set(3.2, 8, 0);
 
-        //obj1.geometry.center();
-        //obj2.geometry.center();
-
         obj1.rotation.z = -Math.PI / 4.;
         obj2.rotation.z = Math.PI / 3.;
 
         const angle = this.counters[1] / 10. * Math.PI / 6;
         const r = 10;
 
+        /* Apply positions to move left loop on circular-like path) */
         obj1.position.set(-0.7, r * Math.cos(angle), r * Math.sin(angle));
         obj2.position.set(-0.5, 9, -2.4);
 
         this.counters[1]++;
     }
 
+    /*
+        This step handling unhooking loops. It uses circle like movement with help of sinus and cosinus functions to move the loops on the sphere.
+        Both loops are moved to opposite "sides" of the sphere to later connect them when shrinking central ball in the next step.
+    */
     stepUnhookLoops()
     {
         const obj1 = this.scene.getObjectByName("loop1");
@@ -213,6 +237,10 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         this.counters[2]++;
     }
 
+    /* 
+        This step is responsible for shrinking the sphere. To keep object consisten loops are getting closer to each other when ball is shrinking.
+        Mostly decreasing radius length and hardcoded movement were used in this step.
+    */
     stepShrinkSphereMoveLoops()
     {
         const oldToroidPart = this.scene.getObjectByName("name1");
@@ -238,6 +266,10 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         this.counters[3]++;
     }
 
+    /*
+        It is final step of animation. Its main responsibility is to start changing rotation of the loops so the final result looks more "straightforward".
+        Function is also intended for continuing shrinking of the ball and its eventual removal.
+    */
     stepFinalizeLoopsRotation()
     {
         if(this.counters[4] == 0)
@@ -273,6 +305,10 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         this.counters[4]++;
     }
 
+    /*
+        This function is responsible for providing parametrization of the main loop as torus-like object. Same parametrization as in ToroidToMugAnimation was used.
+        It is also responsible (as well as in ToroidToMug case) for finding points which will be helpful with calculating tangent of base-cylinders.
+    */
     parametrizedFunction(c, d, target) {
         const u = 0.40;
         const a = 2 * Math.PI * c;
@@ -307,6 +343,10 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         target.set(x, y, z);
     }
 
+    /*
+        This function is responsible for providing basic parametrization for conjoined loops. It is just parametrization of the torus, but with big circle's plane always orthogonal to
+        0X axis. Later those toruses are moved along 0Z axis and rotated along that axis to achieve effect of conjoiness.
+    */
     parametrizedTorusXConstants(a, b, target)
     {
         const phi = 2 * Math.PI * a;
