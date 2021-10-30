@@ -169,8 +169,11 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         obj1.rotation.z = -Math.PI / 4.;
         obj2.rotation.z = Math.PI / 3.;
 
-        obj1.position.set(-0.7, 10, 0);
-        obj2.position.set(-0.5, 9, -2.4);
+        //obj1.position.set(-0.7, 10, 0);
+        //obj2.position.set(-0.5, 9, -2.4);
+    
+        obj1.position.set(1.4, 11.7, 0);
+        obj2.position.set(-1.9, 10.5, -2.4);
     }
 
     /*
@@ -199,8 +202,11 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         const r = 10;
 
         /* Apply positions to move left loop on circular-like path) */
-        obj1.position.set(-0.7, r * Math.cos(angle), r * Math.sin(angle));
-        obj2.position.set(-0.5, 9, -2.4);
+        //obj1.position.set(-0.7, r * Math.cos(angle), r * Math.sin(angle));
+        //obj2.position.set(-0.5, 9, -2.4);
+
+        obj1.position.set(1.4, 11.7 * Math.cos(angle), 11.7 * Math.sin(angle));
+        obj2.position.set(-1.9, 10.5, -2.4);
 
         this.counters[1]++;
     }
@@ -214,26 +220,27 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         const obj1 = this.scene.getObjectByName("loop1");
         const obj2 = this.scene.getObjectByName("loop2");
 
-        const angle1 = this.counters[2] / 20. * 2.06 * Math.PI / 4.;
-        const angle2 = this.counters[2] / 20. * 2.06 * Math.PI / 4.;
+        //const angle1 = this.counters[2] / 20. * 2.06 * Math.PI / 4.;
+        //const angle2 = this.counters[2] / 20. * 2.06 * Math.PI / 4.;
+        const angle1 = this.counters[2] / 20 * 2.06 * Math.PI / 4.;
+        const angle2 = this.counters[2] / 20. * 2.06 * Math.PI / 4.
 
         const R1 = MathHelper.DistanceBtwPoints(new THREE.Vector2(obj1.position.x, obj1.position.y), new THREE.Vector2(0, 0));
         const R2 = MathHelper.DistanceBtwPoints(new THREE.Vector2(obj2.position.x, obj2.position.y), new THREE.Vector2(0, 0)); 
 
-        obj1.position.x = R1 * Math.sin(angle1);
-        obj1.position.y = R1 * Math.cos(angle1);
-
-        if(0 == this.counters[2])
+        if(obj1.position.x < R1 * Math.sin(angle1))
         {
-            obj2.position.x = -0.8;
+
+            obj1.position.x = R1 * Math.sin(angle1);
+            obj1.position.y = R1 * Math.cos(angle1);
         }
 
-        else
+        if(obj2.position.x > -R2 * Math.sin(angle2))
         {
             obj2.position.x = -R2 * Math.sin(angle2);
+            obj2.position.y = R2 * Math.cos(angle2);
         }
-        obj2.position.y = R2 * Math.cos(angle2);
-        
+
         this.counters[2]++;
     }
 
@@ -258,10 +265,13 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
 
         const newBall = this.scene.getObjectByName("ball");
         newBall.position.x = 1.3;
-        newBall.position.y = -3;
+        newBall.position.y = -3.4;
 
-        loop1.position.x -= 0.25;
-        loop2.position.x += 0.25;
+        //loop1.position.x -= 0.25;
+        //loop2.position.x += 0.25;
+
+        loop1.position.x -= 0.34;
+        loop2.position.x += 0.34;
 
         this.counters[3]++;
     }
@@ -288,18 +298,21 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         loop2.position.x -= 0.04;
 
         const ball = this.scene.getObjectByName("ball");
-        if(ball.geometry.parameters.radius >= 0)
-        {
-            this.scene.remove(ball);
-            this.addObjectToScene(new THREE.SphereGeometry(ball.geometry.parameters.radius - 0.1, 40, 40), new THREE.MeshLambertMaterial( {color: this.color} ), "ball", this.scene);
-            const newBall = this.scene.getObjectByName("ball");
-            newBall.position.x = 1.3;
-            newBall.position.y = ball.position.y + 0.2;
-        } 
 
-        else if(ball.geometry.radius < 0)
+        if(this.counters[4] > 15)
         {
             this.scene.remove(ball);
+        }
+        else
+        {
+            if(ball.geometry.parameters.radius >= 0)
+            {
+                this.scene.remove(ball);
+                this.addObjectToScene(new THREE.SphereGeometry(ball.geometry.parameters.radius - 0.1, 40, 40), new THREE.MeshLambertMaterial( {color: this.color} ), "ball", this.scene);
+                const newBall = this.scene.getObjectByName("ball");
+                newBall.position.x = 1.3;
+                newBall.position.y = ball.position.y + 0.2;
+            } 
         }
 
         this.counters[4]++;
