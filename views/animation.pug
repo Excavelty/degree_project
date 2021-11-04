@@ -1,0 +1,12 @@
+doctype html
+html
+    head
+        title Animation
+        include basic_styles.pug
+    body
+        include navbar.pug
+        section(class='canvasElement')
+        include basic_scripts.pug
+        script(type='module' src='/node_modules/three/examples/js/controls/OrbitControls.js')
+        script(type='module' src='/js/main.js')       
+        include footer.pug
