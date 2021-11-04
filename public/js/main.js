@@ -1,5 +1,6 @@
 import { SceneController } from './SceneController.js';
 import { ToroidToMugAnimation } from './animations/ToroidToMugAnimation.js';
+import { HookedLoopsToTwoRingsAnimation } from './animations/HookedLoopsToTwoRingsAnimation.js';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color( 0xdddddd );
@@ -25,6 +26,22 @@ const animate = function() {
 	renderer.render( scene, camera );
 }
 
+const urlBasedAnimation = function(scene) {
+	const url = window.location.href;
+	const name = url.split('predefined-animations')[1].substr(1);
+	console.log(name);
+
+	let animation = null;
+
+	switch(name)
+	{
+		case 'toroid-to-mug': animation = new ToroidToMugAnimation(scene); break;
+		case 'resolve-hooked-loops': animation = new HookedLoopsToTwoRingsAnimation(scene); break; 
+	}
+
+	return animation;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 	const controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.update();
@@ -40,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	sceneController.addPointLight(0xffffff, 1., new THREE.Vector3(-25, 25, 0));
 	sceneController.addPointLight(0xffffff, 1., new THREE.Vector3(25, -25, 0));
 
-	const animation = new ToroidToMugAnimation(scene);
+	const animation = urlBasedAnimation(scene);
 
 	sceneController.loadAnimation(animation);
     sceneController.startAnimation(100);

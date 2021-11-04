@@ -1,0 +1,33 @@
+doctype html
+html
+    head
+        title Topology visualizer - engineering deegree project
+        include basic_styles.pug
+    body
+        include navbar.pug
+        div(id="carouselExampleIndicators" class="carousel slide" data-ride="carousel")
+            ol(class="carousel-indicators")
+                li(data-target="#carouselExampleIndicators" data-slide-to="0" class="active")
+                li(data-target="#carouselExampleIndicators" data-slide-to="1")
+            div(class="carousel-inner")
+                div(class="carousel-item active")
+                    a(href="/predefined-animations/toroid-to-mug")
+                        img(src="/img/toroid_to_mug.jpg" alt="Toroid to mug")
+                    div(class="carousel-caption d-none d-md-block")
+                        h5 Toroid to mug animation
+                        p Vintage example of topological homeomorphism between two genus-1 objects: toroidal loop and a mug.
+                div(class="carousel-item")
+                    a(href='/predefined-animations/resolve-hooked-loops')
+                        img(src="/img/resolve_hooked_loops.jpg" alt="Resolve hooked loops")
+                    div(class="carousel-caption d-none d-md-block")
+                        h5 Resolve loops animation
+                        p Surprising homeomorphisem between hooked loops and two conjoined loops
+        
+            a(class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev")
+                span(class="carousel-control-prev-icon" aria-hidden="true")
+                span(class="sr-only") Previous
+            a(class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next")
+                span(class="carousel-control-next-icon" aria-hidden="true")
+                span(class="sr-only") Next
+        include footer.pug
+        include basic_scripts.pug

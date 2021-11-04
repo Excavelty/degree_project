@@ -1,0 +1,70 @@
+body
+{
+    background: #262626 !important;
+}
+
+.canvasElement
+{
+    width: 80vw;
+    height: 80vh;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2vh;
+}
+
+.carousel
+{
+    width: 34vw;
+    height: 70vh;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10vh;
+    background-color: #887D8C;
+    border: 1px solid #887D8C;
+    border-radius: 10px;
+}
+
+.carousel-item
+{
+    width: 90%;
+    height: 94%;
+    margin-left: 5%;
+    margin-top: 6%;
+    color: white !important;
+}
+
+.carousel-item>a>img
+{
+    display: block;
+    background-position: center center;
+    background-size: cover;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.carousel-item>a
+{
+    display: inline-block;
+}
+
+.carousel-item>a:hover
+{
+    background-color: #00ffaa;
+}
+
+.carousel-item>a>img:hover
+{
+    opacity: 0.75;
+}
+
+.footer
+{
+    background-color: #BF3939;
+    color: white;
+    text-align: center;
+    font-size: 1vw;
+    position: fixed;
+    top: 96vh;
+    width: 100vw;
+    height: 4vh;
+}
