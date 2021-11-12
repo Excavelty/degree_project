@@ -1,0 +1,29 @@
+{
+  "name": "kod",
+  "version": "1.0.0",
+  "description": "Engineering degree project",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pug": "^3.0.2",
+    "three": "^0.128.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://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@github.com/Excavelty/degree_project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Excavelty/degree_project/issues"
+  },
+  "engines": {
+      "node": "14.16.1"
+    },
+  "homepage": "https://github.com/Excavelty/degree_project#readme"
+}
