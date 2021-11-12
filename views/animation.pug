@@ -6,7 +6,24 @@ html
     body
         include navbar.pug
         section(class='canvasElement')
+        section(class='menu card text-white bg-dark')
+            section(class="card-header") Menu
+            section(class="card-body")
+                div(class="form-group")
+                    label(class="form-label" for="speedSlider") Set animation speed (ms between steps)
+                    input(type="range" name="speedSlider" min="100" max = "1000" value="500" class="form-range")
+                    input(type="text" class="form-control rangeIndicator" disabled)
+                div(class="form-group")
+                    input(type="button" class="btn btn-primary btn-animation btnRunAuto" value="Run automatically with selected speed")
+                br
+                div(class="form-group")
+                    label(class="form-label" for="nextStep") Run animation step by step with descriptive messages displayed between steps
+                    input(type="button" name="nextStep" class="btn btn-primary btn-animation btnRunStep" value="Run next step")
+                br
+                div(class="form-group")
+                    label(class="form-label" for="stepsSlider") Current state of animation
+                    input(type="range" name="stepsSlaider" class="form-control stepIndicator" min = "1" class="form-range" value="1" disabled)
         include basic_scripts.pug
-        script(type='module' src='/node_modules/three/examples/js/controls/OrbitControls.js')
+        script(type='module' src='/three/examples/js/controls/OrbitControls.js')
         script(type='module' src='/js/main.js')       
         include footer.pug

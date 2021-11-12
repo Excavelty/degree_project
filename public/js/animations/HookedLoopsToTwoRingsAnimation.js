@@ -55,6 +55,10 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         
         this.maxY = 0;
         this.maxX = Number.POSITIVE_INFINITY;
+
+        /* Animation step counter and total number of steps (for visualization on slider) */
+        this.currentAnimationStep = 1;
+        this.totalAnimationSteps = 90;
     }
 
     /* @override */
@@ -64,26 +68,39 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
         {
             this.stepBlowToroid();
             this.drawStaticLoops();
+            this.currentAnimationStep++;
+            this.addStepDescription("At the beginning we want to blow a ball to cover bottom loop element and enable further unhooking of top loops. Please, notice that we are\
+            are not gluing anything in this operation, because paradoxically the space between hooked loops and bottom loop cannot be considered as a hole. Stay there longer if needed,\
+            understanding of this operation is crucial to understand homeomorphism presented in that operation.");
         }
 
         else if(this.counters[1] < 10)
         {
             this.stepMoveLoopBeforeUnhooking();
+            this.currentAnimationStep++;
+            this.addStepDescription("Now we may move one of hooked loops using circular motion to prepare before resolving them totally.");
         }
 
         else if(this.counters[2] < 20)
         {
             this.stepUnhookLoops();
+            this.currentAnimationStep++;
+            this.addStepDescription("In that steps, we are moving both loops using circular movement to unhook them withouth gluing anything accidentally.");
         }
 
         else if(this.counters[3] < 20)
         {
             this.stepShrinkSphereMoveLoops();
+            this.currentAnimationStep++;
+            this.addStepDescription("Next steps are to shrink ball. Please, notice that loops cannot be unjoined anyhow from the ball until they connect and ball shrinks completely.");
         }
 
         else if(this.counters[4] < 20)
         {
             this.stepFinalizeLoopsRotation();
+            this.currentAnimationStep++;
+            this.addStepDescription("Finally, let's move both rings without tearing them off to make them stay in same rotation. Notice that we havent done any 'topologically illegal'\
+            operation to achieve object which is obviously genus-2.")
         }
     }
 
@@ -91,6 +108,14 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
     begin(frequency)
     {
         window.setInterval(this.doStep.bind(this), frequency);
+    }
+
+    /* @override */
+    isAnimationOver()
+    {
+        const isOver = this.counters[4] >= 20;
+        
+        return isOver;
     }
 
     /*

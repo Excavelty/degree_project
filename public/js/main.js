@@ -9,8 +9,10 @@ const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.inner
 const renderer = new THREE.WebGLRenderer();
 const canvasElement = document.querySelector('.canvasElement');
 renderer.canvas = canvasElement
-renderer.setSize( window.innerWidth * 0.8, window.innerHeight * 0.8);
+renderer.setSize( canvasElement.offsetWidth, canvasElement.offsetHeight * 0.9);
 canvasElement.appendChild( renderer.domElement );
+
+let animationSpeed = 0;
 
 // const axesHelper = new THREE.AxesHelper(5);
 // scene.add(axesHelper);
@@ -29,7 +31,6 @@ const animate = function() {
 const urlBasedAnimation = function(scene) {
 	const url = window.location.href;
 	const name = url.split('predefined-animations')[1].substr(1);
-	console.log(name);
 
 	let animation = null;
 
@@ -37,9 +38,81 @@ const urlBasedAnimation = function(scene) {
 	{
 		case 'toroid-to-mug': animation = new ToroidToMugAnimation(scene); break;
 		case 'resolve-hooked-loops': animation = new HookedLoopsToTwoRingsAnimation(scene); break; 
+		default: alert("Animation was not found, please provide proper URL");
 	}
 
 	return animation;
+}
+
+const addMenuListeners = function(sceneController)
+{
+	const menu = document.querySelector('.menu');
+	
+	const rangeSlider = menu.querySelector('.form-range');
+	const rangeIndicator = menu.querySelector('.rangeIndicator');
+	const automaticAnimationButton = menu.querySelector('.btnRunAuto');
+	const stepByStepAnimationButton = menu.querySelector('.btnRunStep');
+	const stepIndicator = menu.querySelector('.stepIndicator');
+
+	animationSpeed = rangeSlider.value; 
+	rangeIndicator.value = rangeSlider.value + ' ms';
+
+	let animation = null;
+
+	rangeSlider.addEventListener('change', () => { animationSpeed = rangeSlider.value; rangeIndicator.value = rangeSlider.value + ' ms' });
+
+	automaticAnimationButton.addEventListener('click', function() {
+		stepByStepAnimationButton.disabled = true;
+		// automaticAnimationButton.disabled = true;
+
+		if(null !== animation)
+		{
+			animation.removeAllObjects(sceneController.scene);
+		}
+
+		animation = urlBasedAnimation(scene);
+
+		if(null !== animation)
+		{
+			sceneController.loadAnimation(animation);
+		}
+		
+		sceneController.startAnimation(animationSpeed);
+	});
+
+	let runningSteps = false;
+
+	stepByStepAnimationButton.addEventListener('click', function() {
+		automaticAnimationButton.disabled = true;
+
+		if(null !== animation && false === runningSteps)
+		{
+			animation.removeAllObjects(sceneController.scene);
+		}
+
+		animation = urlBasedAnimation(scene);
+
+		if(null !== animation && false === runningSteps)
+		{
+			sceneController.loadAnimation(animation);
+		}
+
+		runningSteps = true;
+
+		sceneController.doAnimationStep();
+
+		stepIndicator.max = sceneController.animation.getTotalAnimationSteps();
+		stepIndicator.value = sceneController.animation.getCurrentAnimationStep()
+
+		if(sceneController.isAnimationOver())
+		{
+			console.log('KONIEC');
+			//runningSteps = false;
+			animation.removeAllObjects(sceneController.scene);
+			automaticAnimationButton.disabled = false;
+			stepByStepAnimationButton.disabled = true;
+		}
+	});
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -57,11 +130,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	sceneController.addPointLight(0xffffff, 1., new THREE.Vector3(-25, 25, 0));
 	sceneController.addPointLight(0xffffff, 1., new THREE.Vector3(25, -25, 0));
 
-	const animation = urlBasedAnimation(scene);
+	addMenuListeners(sceneController);
 
-	sceneController.loadAnimation(animation);
-    sceneController.startAnimation(100);
-		
 	// camera.position.z = 25;
 
 	animate();
