@@ -70,4 +70,23 @@ export class SceneController
     {
         this.animation.begin(frequency);
     }
+
+    /*
+        Execute single animation step. In this mode additional information describing animations is going to be provided
+    */
+    doAnimationStep()
+    {
+        this.animation.doStep();
+    }
+
+    /*
+        Check if animation 
+        Returns
+        = isOver (boolean)
+    */
+    isAnimationOver()
+    {
+        const isOver = this.animation.isAnimationOver();
+        return isOver;
+    }
 }

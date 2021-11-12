@@ -43,6 +43,60 @@ export class Animation
     }
 
     /*
+        This function has to be overriden in child classes.
+        Its responsibility is to check if animation was finished and return proper state.
+        Returns:
+        - isOver (Boolean) - flag if animation was over or not
+    */
+    isAnimationOver()
+    {
+        throw new Error("Function isAnimationOver() should be implemented.");
+    }
+
+    /*
+        Return current step of animation
+        Returns:
+        currentStep (Integer) - current animation step
+    */
+   getCurrentAnimationStep()
+   {
+       return this.currentAnimationStep;
+   }
+
+    /*
+        Return total animation steps
+        Returns:
+        totalSteps (Integer) - total animation steps
+    */
+   getTotalAnimationSteps()
+   {
+       return this.totalAnimationSteps;
+   }
+
+   /*
+    Adds description of a step to the animation. It also clears previous message if it exists.
+    Parameters:
+    - scene (THREE.Scene)
+    - descriptionText (String)
+   */
+   addStepDescription(descriptionText)
+   {
+       const descriptionElement = document.createElement('div');
+       descriptionElement.textContent = descriptionText;
+       descriptionElement.classList += 'alert alert-info';
+       
+       const canvasElement = document.querySelector('.canvasElement');
+       const oldDescriptionElement = canvasElement.querySelector('.alert');
+
+       if(undefined !== oldDescriptionElement && null !== oldDescriptionElement)
+       {
+           canvasElement.removeChild(oldDescriptionElement);
+       }
+
+       canvasElement.appendChild(descriptionElement);
+   }
+
+    /*
         This function enables removing from scene all objects added through addObjectToScene method.
         Parameters:
         - scene (THREE.Scene)
