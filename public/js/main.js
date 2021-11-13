@@ -12,6 +12,14 @@ renderer.canvas = canvasElement
 renderer.setSize( canvasElement.offsetWidth, canvasElement.offsetHeight * 0.9);
 canvasElement.appendChild( renderer.domElement );
 
+const description = document.createElement('div');
+description.classList += 'alert alert-warning';
+description.textContent = 'Choose animation speed and press button to run animation automatically or use "Run next step" button to run animation step by step and notice progress \
+on the slider. Pressing reset animation\
+will reset animation and will enable rerunning it on same or different way. During running animation description of ongoing steps will be displayed. Remember that you may use your \
+mouse to move the camera and look at object from different angles. You may also scroll to move closer to the object.';
+canvasElement.appendChild(description);
+
 let animationSpeed = 0;
 
 // const axesHelper = new THREE.AxesHelper(5);
@@ -53,6 +61,7 @@ const addMenuListeners = function(sceneController)
 	const automaticAnimationButton = menu.querySelector('.btnRunAuto');
 	const stepByStepAnimationButton = menu.querySelector('.btnRunStep');
 	const stepIndicator = menu.querySelector('.stepIndicator');
+	const restartButton = menu.querySelector('.btnRestart');
 
 	animationSpeed = rangeSlider.value; 
 	rangeIndicator.value = rangeSlider.value + ' ms';
@@ -63,7 +72,7 @@ const addMenuListeners = function(sceneController)
 
 	automaticAnimationButton.addEventListener('click', function() {
 		stepByStepAnimationButton.disabled = true;
-		// automaticAnimationButton.disabled = true;
+		automaticAnimationButton.disabled = true;
 
 		if(null !== animation)
 		{
@@ -106,11 +115,22 @@ const addMenuListeners = function(sceneController)
 
 		if(sceneController.isAnimationOver())
 		{
-			console.log('KONIEC');
-			//runningSteps = false;
 			animation.removeAllObjects(sceneController.scene);
-			automaticAnimationButton.disabled = false;
 			stepByStepAnimationButton.disabled = true;
+		}
+	});
+
+	restartButton.addEventListener('click', function() {
+		if(null !== animation && undefined !== animation)
+		{
+			automaticAnimationButton.disabled = false;
+			stepByStepAnimationButton.disabled = false;
+
+			sceneController.stopAnimation();
+			sceneController.animation.removeAllObjects(sceneController.scene);
+			sceneController.animation = null;
+			runningSteps = false;
+			stepIndicator.value = 1;
 		}
 	});
 }

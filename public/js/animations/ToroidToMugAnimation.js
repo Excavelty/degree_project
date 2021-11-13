@@ -70,7 +70,7 @@ export class ToroidToMugAnimation extends Animation
         if(this.counters[0] < 20)
         {
             this.stepResolveToCylinder();
-            this.addStepDescription("The most vital part of the transormation is resolving bottom part of torus-like object into cylinder. Parametric equations for the torus\
+            this.addStepDescription("The most vital part of the transformation is resolving bottom part of torus-like object into cylinder. Parametric equations for the torus\
             are based on circle's evolvents and are described in the paper along with the source of this idea.");
             this.currentAnimationStep++;
         }

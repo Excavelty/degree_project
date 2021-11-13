@@ -76,6 +76,7 @@ export class SceneController
     */
     doAnimationStep()
     {
+        this.animation.running = true;
         this.animation.doStep();
     }
 
@@ -88,5 +89,13 @@ export class SceneController
     {
         const isOver = this.animation.isAnimationOver();
         return isOver;
+    }
+
+    /*
+        This function is used to indicate that animation shall be no longer running. It is used to stop automatic animation which is running with setInterval.
+    */
+    stopAnimation()
+    {
+        this.animation.running = false;
     }
 }
