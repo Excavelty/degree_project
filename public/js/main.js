@@ -127,7 +127,10 @@ const addMenuListeners = function(sceneController)
 			stepByStepAnimationButton.disabled = false;
 
 			sceneController.stopAnimation();
-			sceneController.animation.removeAllObjects(sceneController.scene);
+			if(null !== sceneController.animation && undefined !== sceneController.animation)
+			{
+				sceneController.animation.removeAllObjects(sceneController.scene);
+			}
 			sceneController.animation = null;
 			runningSteps = false;
 			stepIndicator.value = 1;

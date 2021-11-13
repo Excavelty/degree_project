@@ -96,6 +96,9 @@ export class SceneController
     */
     stopAnimation()
     {
-        this.animation.running = false;
+        if(null !== this.animation && undefined !== this.animation)
+        {
+            this.animation.running = false;
+        }
     }
 }
