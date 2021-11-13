@@ -15,14 +15,15 @@ html
                     input(type="text" class="form-control rangeIndicator" disabled)
                 div(class="form-group")
                     input(type="button" class="btn btn-primary btn-animation btnRunAuto" value="Run automatically with selected speed")
-                br
                 div(class="form-group")
                     label(class="form-label" for="nextStep") Run animation step by step with descriptive messages displayed between steps
                     input(type="button" name="nextStep" class="btn btn-primary btn-animation btnRunStep" value="Run next step")
-                br
                 div(class="form-group")
                     label(class="form-label" for="stepsSlider") Current state of animation
                     input(type="range" name="stepsSlaider" class="form-control stepIndicator" min = "1" class="form-range" value="1" disabled)
+                div(class="form-group")
+                    label(class="form-label" for="restartButton") Restart button (to reload animation and reenable buttons)
+                    input(type="button" name="restartButton" class="btn btn-primary btn-animation btnRestart" value="Reset animation")
         include basic_scripts.pug
         script(type='module' src='/three/examples/js/controls/OrbitControls.js')
         script(type='module' src='/js/main.js')       
