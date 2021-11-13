@@ -58,6 +58,8 @@ export class ToroidToMugAnimation extends Animation
     
         this.currentAnimationStep = 1;
         this.totalAnimationSteps = 65;
+
+        this.running = false;
     }
 
     /* @override */
@@ -67,28 +69,31 @@ export class ToroidToMugAnimation extends Animation
     */
     doStep()
     {
-        if(this.counters[0] < 20)
+        if(this.running)
         {
-            this.stepResolveToCylinder();
-            this.addStepDescription("The most vital part of the transformation is resolving bottom part of torus-like object into cylinder. Parametric equations for the torus\
-            are based on circle's evolvents and are described in the paper along with the source of this idea.");
-            this.currentAnimationStep++;
-        }
+            if(this.counters[0] < 20)
+            {
+                this.stepResolveToCylinder();
+                this.addStepDescription("The most vital part of the transformation is resolving bottom part of torus-like object into cylinder. Parametric equations for the torus\
+                are based on circle's evolvents and are described in the paper along with the source of this idea.");
+                this.currentAnimationStep++;
+            }
 
-        if(this.counters[1] < 14 && this.counters[0] > 12)
-        {
-            this.stepShrinkTopRotateCylinders();
-            this.addStepDescription("In those steps two things are achieved: top of the object is shrinked horizontally to start forming mug's handle and formation of the cylinder\
-            is being finished.");
-            this.currentAnimationStep++;
-        }
+            if(this.counters[1] < 14 && this.counters[0] > 12)
+            {
+                this.stepShrinkTopRotateCylinders();
+                this.addStepDescription("In those steps two things are achieved: top of the object is shrinked horizontally to start forming mug's handle and formation of the cylinder\
+                is being finished.");
+                this.currentAnimationStep++;
+            }
 
-        if((this.counters[1] >= 14 && this.counters[2] < 20) || (this.counters[3] < 20 && this.counters[0] >= 20))
-        {
-            this.stepAdjustHandleMoveCylinder();
-            this.addStepDescription("In the last steps we are adjusting top part to look more handle-like and we are creating dimple to make interior of the mug. Please, notice\
-            that by creating that dimple we are not breaking topological rules since its not a hole in topological understanding.");
-            this.currentAnimationStep++;
+            if((this.counters[1] >= 14 && this.counters[2] < 20) || (this.counters[3] < 20 && this.counters[0] >= 20))
+            {
+                this.stepAdjustHandleMoveCylinder();
+                this.addStepDescription("In the last steps we are adjusting top part to look more handle-like and we are creating dimple to make interior of the mug. Please, notice\
+                that by creating that dimple we are not breaking topological rules since its not a hole in topological understanding.");
+                this.currentAnimationStep++;
+            }
         }
     }
 
@@ -96,6 +101,7 @@ export class ToroidToMugAnimation extends Animation
     /* This function triggers animation with interval between frames specifiend in ms in frequency parameter. */
     begin(frequency)
     {
+        this.running = true;
         window.setInterval(this.doStep.bind(this), frequency);
     }
 
