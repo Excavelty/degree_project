@@ -23,7 +23,7 @@
     "url": "https://github.com/Excavelty/degree_project/issues"
   },
   "engines": {
-      "node": "14.16.1"
-    },
+    "node": "14.16.1"
+  },
   "homepage": "https://github.com/Excavelty/degree_project#readme"
 }
