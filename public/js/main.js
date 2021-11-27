@@ -1,6 +1,7 @@
 import { SceneController } from './SceneController.js';
-import { ToroidToMugAnimation } from './animations/ToroidToMugAnimation.js';
+import { TorusToMugAnimation } from './animations/TorusToMugAnimation.js';
 import { HookedLoopsToTwoRingsAnimation } from './animations/HookedLoopsToTwoRingsAnimation.js';
+import { BoatToTorusAnimation } from './animations/BoatToTorusAnimation.js';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color( 0xdddddd );
@@ -44,8 +45,9 @@ const urlBasedAnimation = function(scene) {
 
 	switch(name)
 	{
-		case 'toroid-to-mug': animation = new ToroidToMugAnimation(scene); break;
+		case 'torus-to-mug': animation = new TorusToMugAnimation(scene); break;
 		case 'resolve-hooked-loops': animation = new HookedLoopsToTwoRingsAnimation(scene); break; 
+		case 'boat-to-torus': animation = new BoatToTorusAnimation(scene); break;
 		default: alert("Animation was not found, please provide proper URL");
 	}
 

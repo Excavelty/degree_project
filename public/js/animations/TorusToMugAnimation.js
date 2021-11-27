@@ -11,7 +11,7 @@ import { MathHelper } from "../utility/MathHelper.js";
 
 */
 
-export class ToroidToMugAnimation extends Animation
+export class TorusToMugAnimation extends Animation
 {
     /*
         Constructor of the class will pass the scene to class field.
