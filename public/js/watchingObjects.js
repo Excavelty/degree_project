@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     sceneController.addPointLight(0xffffff, 1., new THREE.Vector3(-25, 25, 0));
     sceneController.addPointLight(0xffffff, 1., new THREE.Vector3(25, -25, 0));
 
-    const loader = new ObjectLoader(scene);
+    const loader = new ObjectLoader(scene, sceneController, controls, renderer);
 
     const buttons = document.querySelectorAll('.btn');
 

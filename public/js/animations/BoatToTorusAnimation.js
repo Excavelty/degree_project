@@ -23,6 +23,7 @@ export class BoatToTorusAnimation extends Animation
         this.running = false;
 
         this.material = new THREE.MeshLambertMaterial( { color: 0xffd700 });
+        this.material.side = THREE.DoubleSide;
     }
 
     /* @override */
@@ -49,9 +50,12 @@ export class BoatToTorusAnimation extends Animation
 
     toroidParametrization(a, b, target)
     {
+        a = 4 * a;
+        b = 4 * b;
+
         const x = a;
-        const y = a;
-        const z = 0.25 * a * a + 0.25 * b * b;
+        const y = b;
+        const z = a * a + b * b;
 
         target.set(x, y, z);
     }
