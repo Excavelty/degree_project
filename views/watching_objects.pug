@@ -1,0 +1,28 @@
+doctype html
+html
+    head
+        title Watching objects
+        include basic_styles.pug
+    body
+        include navbar.pug
+        section(class='canvasElement')
+        section(class='menu card text-white bg-dark')
+            section(class="card-header") Menu
+            section(class="card-body")
+                div(class="form-group")
+                    input(type="button" class="btn btn-primary" name="torus" value="Torus")
+                div(class="form-group")
+                    input(type="button" class="btn btn-primary" name="mug" value="Mug")
+                div(class="form-group")
+                    input(type="button" class="btn btn-primary" name="hooked_loops" value="Hooked loops")
+                div(class="form-group")
+                    input(type="button" class="btn btn-primary" name="double_torus" value="Double torus")
+                div(class="form-group")
+                    input(type="button" class="btn btn-primary" name="mobius_strip" value="Mobius strip")
+                div(class="form-group")
+                    input(type="button" class="btn btn-primary" name="bottle" value="Klein's bottle")
+        include basic_scripts.pug
+        script(type='module' src='/three/examples/js/controls/OrbitControls.js')
+        script(type='module' src='/three/examples/js/geometries/ParametricGeometries.js')
+        script(type='module' src='/js/watchingObjects.js')       
+        include footer.pug

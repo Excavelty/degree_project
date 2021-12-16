@@ -47,8 +47,8 @@
 			u = u - 0.5;
 			const v = 2 * Math.PI * t;
 			const a = 2;
-			const x = Math.cos( v ) * ( a + u * Math.cos( v / 2 ) );
-			const y = Math.sin( v ) * ( a + u * Math.cos( v / 2 ) );
+			const x = Math.cos( v ) * ( 4 * a +  u * Math.cos( v / 2 ) );
+			const y = Math.sin( v ) * ( 4 * a +  u * Math.cos( v / 2 ) );
 			const z = u * Math.sin( v / 2 );
 			target.set( x, y, z );
 

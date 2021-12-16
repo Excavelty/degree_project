@@ -76,7 +76,6 @@ export class Animation
    /*
     Adds description of a step to the animation. It also clears previous message if it exists.
     Parameters:
-    - scene (THREE.Scene)
     - descriptionText (String)
    */
    addStepDescription(descriptionText)
