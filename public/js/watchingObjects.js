@@ -33,6 +33,23 @@ document.addEventListener('DOMContentLoaded', function() {
     for(const button of buttons)
     {
         button.addEventListener('click', function() {
+            if(loader.mobiusAnimation != null) {
+                loader.mobiusAnimation.running = false;
+            }
+
+            const toRemoveObjects = []
+
+            for(let i = 0; i < scene.children.length; ++i) {
+                
+                if(! (scene.children[i] instanceof THREE.PointLight) ) {
+                    toRemoveObjects.push(scene.children[i]);
+                }
+            }
+
+            for(const rm of toRemoveObjects) {
+                scene.remove(rm);
+            }
+
             loader.loadObject(this.name);
         });
     }

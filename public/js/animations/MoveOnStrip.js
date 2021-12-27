@@ -73,16 +73,25 @@ export class MoveOnStrip extends Animation
             for(let i = 40; i < 50; ++i) {
                 this.normals[i].x -= 2;
                 this.normals[i].y -= 2;
-                //this.normals[i].z -= 2;
             }
 
-            this.normals[44].y -= 3.;
+            this.normals[44].y -= 2.2;
+            this.normals[44].z -= 0.8;
+            this.normals[44].x += 1.;
             this.normals[45].y -= 2.;
             this.normals[45].z -= 2;
 
             for(let i = 48; i <= 51; ++i) {
                 this.normals[i].y -= 1.5;
                 this.normals[i].z -= 1.5
+            }
+
+            this.normals[40] = this.normals[39];
+            this.normals[49].y += 1;
+
+            for(let i = 45; i <= 50; ++i) {
+                // this.normals[i].x += 0.3;
+                this.normals[i].y += 0.5;
             }
 
             for(let i = 69; i < 80; ++i) {
@@ -111,35 +120,26 @@ export class MoveOnStrip extends Animation
             {
                 this.addObjectToScene(new THREE.SphereGeometry(0.4, 40., 40.), this.material, "sphere" + this.counter, this.scene)
                 const currentSphere = this.scene.getObjectByName("sphere" + this.counter);
-                const length = Math.sqrt(this.normals[this.counter].x * this.normals[this.counter].x + this.normals[this.counter].y * this.normals[this.counter].y + 
-                    this.normals[this.counter].z * this.normals[this.counter].z);
+                
+                currentSphere.position.x = this.positions[this.counter].x + 0.4 * this.normals[this.counter].x;
+                currentSphere.position.y = this.positions[this.counter].y + 0.4 * this.normals[this.counter].y;
+                currentSphere.position.z = this.positions[this.counter].z + 0.4 * this.normals[this.counter].z;
 
-                //if(this.counter <= this.DIVIDER * 3 / 4)
-                {
-                    currentSphere.position.x = this.positions[this.counter].x + 0.4 * this.normals[this.counter].x;
-                    currentSphere.position.y = this.positions[this.counter].y + 0.4 * this.normals[this.counter].y;
-                    currentSphere.position.z = this.positions[this.counter].z + 0.4 * this.normals[this.counter].z;
-                }
+                name = "sphere" + (this.counter - 1);
 
                 this.counter++;
 
                 if(this.counter == 2 * this.DIVIDER) {
                     this.counter = 0;
-                    //this.running = false;
-                }
-       
-                let name = "sphere" + (this.counter - 2);
-
-                if(this.counter == 0) {
-                    name = "sphere" + (2 * this.DIVIDER - 1);
                 }
 
-                const sphereToRemove = this.scene.getObjectByName(name);
+                let sphereToRemove = this.scene.getObjectByName(name);
 
-                //if(this.counter <= this.DIVIDER)
-                {
-                   this.scene.remove(sphereToRemove);
-                }
+                this.scene.remove(sphereToRemove);
+
+                sphereToRemove = this.scene.getObjectByName("sphere" + (2 * this.DIVIDER - 1));
+
+                this.scene.remove(sphereToRemove);
             }
         }
     

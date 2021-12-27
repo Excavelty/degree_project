@@ -74,24 +74,23 @@ export class TorusToMugAnimation extends Animation
             if(this.counters[0] < 20)
             {
                 this.stepResolveToCylinder();
-                this.addStepDescription("The most vital part of the transformation is resolving bottom part of torus-like object into cylinder. Parametric equations for the torus\
-                are based on circle's evolvents and are described in the paper along with the source of this idea.");
+                this.addStepDescription("The first part of the transformation is to deform the bottom part of the torus into a solid cylinder.\
+                Note, that the deformation is continous, that is without tearing the surface.\
+                Parametric equations for the torus needed in this animation are based on circle's evolvents and are described in the paper.");
                 this.currentAnimationStep++;
             }
 
             if(this.counters[1] < 14 && this.counters[0] > 12)
             {
                 this.stepShrinkTopRotateCylinders();
-                this.addStepDescription("In those steps two things are achieved: top of the object is shrinked horizontally to start forming mug's handle and formation of the cylinder\
-                is being finished.");
+                this.addStepDescription("The top of the object is shrinked horizontally to start forming the mug's handle, while the bottom solid cylinder will be the mug's body.");
                 this.currentAnimationStep++;
             }
 
             if((this.counters[1] >= 14 && this.counters[2] < 20) || (this.counters[3] < 20 && this.counters[0] >= 20))
             {
                 this.stepAdjustHandleMoveCylinder();
-                this.addStepDescription("In the last steps we are adjusting top part to look more handle-like and we are creating dimple to make interior of the mug. Please, notice\
-                that by creating that dimple we are not breaking topological rules since its not a hole in topological understanding.");
+                this.addStepDescription("In the last step we adjust the top part to look more handle-like and we create a dimple to make interior of the mug. Notice, that the dimple is a continous transformation, since we do not create an actual hole in terms of topology.");
                 this.currentAnimationStep++;
             }
         }

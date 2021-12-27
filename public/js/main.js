@@ -1,6 +1,6 @@
 import { SceneController } from './SceneController.js';
 import { TorusToMugAnimation } from './animations/TorusToMugAnimation.js';
-import { HookedLoopsToTwoRingsAnimation } from './animations/HookedLoopsToTwoRingsAnimation.js';
+import { LinkedLoopsToTwoRingsAnimation } from './animations/LinkedLoopsToTwoRingsAnimation.js';
 import { BoatToTorusAnimation } from './animations/BoatToTorusAnimation.js';
 
 const scene = new THREE.Scene();
@@ -15,10 +15,8 @@ canvasElement.appendChild( renderer.domElement );
 
 const description = document.createElement('div');
 description.classList += 'alert alert-warning';
-description.textContent = 'Choose animation speed and press button to run animation automatically or use "Run next step" button to run animation step by step and notice progress \
-on the slider. Pressing reset animation\
-will reset animation and will enable rerunning it on same or different way. During running animation description of ongoing steps will be displayed. Remember that you may use your \
-mouse to move the camera and look at object from different angles. You may also scroll to move closer to the object.';
+description.textContent = 'Choose animation speed and press the button to run the 3D animation automatically, or use "Animate the next stage" button to run the animation until the next key step in a given transformation.\
+ During the 3D animation a description of the ongoing steps is displayed. You may use your mouse to move the camera and look at object from different angles. You may also scroll to move closer to the object."';
 canvasElement.appendChild(description);
 
 let animationSpeed = 0;
@@ -46,7 +44,7 @@ const urlBasedAnimation = function(scene) {
 	switch(name)
 	{
 		case 'torus-to-mug': animation = new TorusToMugAnimation(scene); break;
-		case 'resolve-hooked-loops': animation = new HookedLoopsToTwoRingsAnimation(scene); break; 
+		case 'resolve-hooked-loops': animation = new LinkedLoopsToTwoRingsAnimation(scene); break; 
 		case 'boat-to-torus': animation = new BoatToTorusAnimation(scene); break;
 		default: alert("Animation was not found, please provide proper URL");
 	}

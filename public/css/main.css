@@ -6,7 +6,8 @@ body
 .canvasElement
 {
     width: 70vw;
-    height: 70vh;
+    min-height: 70vh;
+    max-height: 75vh;
     margin-left: 4vw;
     margin-top: 5vh;
     display: block;
@@ -35,31 +36,45 @@ body
 .carousel
 {
     width: 34vw;
-    height: 70vh;
-    margin-left: auto;
+    float: left;
+    height: auto;
+    margin-left: 10vw;
     margin-right: auto;
-    margin-top: 10vh;
+    margin-top: 15vh;
     background-color: #887D8C;
     border: 1px solid #887D8C;
     border-radius: 10px;
 }
 
+.projectDescription {
+    float: left;
+    margin-left: 10vw;
+    width: 30vw;
+    margin-top: 10vh;
+}
+
 .carousel-item
 {
-    width: 90%;
-    height: 94%;
-    margin-left: 5%;
+    /*margin-left: 5%;
     margin-top: 6%;
+    */
     color: white !important;
 }
 
-.carousel-item>a>img
+.carousel-item>a
 {
-    display: block;
+    /*display: block;
     background-position: center center;
-    background-size: cover;
+    background-size: cover;*/
+    width: 100%;
+    height: auto;
     border: 1px solid #ddd;
     border-radius: 5px;
+}
+
+.carousel-item>a>img {
+    width: 100%;
+    height: auto;
 }
 
 .carousel-item>a
@@ -67,14 +82,9 @@ body
     display: inline-block;
 }
 
-.carousel-item>a:hover
+.carousel-item:hover
 {
-    background-color: #00ffaa;
-}
-
-.carousel-item>a>img:hover
-{
-    opacity: 0.75;
+    opacity: 0.5;
 }
 
 .footer

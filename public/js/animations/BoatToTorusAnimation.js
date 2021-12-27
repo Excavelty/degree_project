@@ -22,7 +22,7 @@ export class BoatToTorusAnimation extends Animation
 
         this.running = false;
 
-        this.material = new THREE.MeshLambertMaterial( { color: 0xffd700 });
+        this.material = new THREE.MeshLambertMaterial( { color: 0x00d700 });
         this.material.side = THREE.DoubleSide;
     }
 
@@ -31,7 +31,15 @@ export class BoatToTorusAnimation extends Animation
     {
         if(this.running)
         {
-            this.addObjectToScene(new THREE.ParametricGeometry( this.toroidParametrization.bind(this), 40, 40 ), this.material, "toroid", this.scene);
+            this.removeAllObjects(this.scene)
+         
+            this.addObjectToScene(new THREE.ParametricGeometry( this.toroidParametrization.bind(this), 40, 40 ), this.material, "boat", this.scene);
+            const obj = this.scene.getObjectByName("boat");
+
+            obj.rotation.x = Math.PI;
+            if(this.counters[0] < 40)
+            this.counters[0]++;
+            else this.counters[1]++;
         }
     }
 
@@ -48,14 +56,17 @@ export class BoatToTorusAnimation extends Animation
         return false;
     }
 
-    toroidParametrization(a, b, target)
+    toroidParametrization(param1, param2, target)
     {
-        a = 4 * a;
-        b = 4 * b;
+        const phi =   Math.PI * param1;
+        const theta = Math.PI * param2;
+        const a = 45. - this.counters[0];
+        const b = 16. - this.counters[1];
+        const c = 18.;
 
-        const x = a;
-        const y = b;
-        const z = a * a + b * b;
+        const x = a * Math.cos(phi) * Math.sin(theta);
+        const y = b * Math.sin(phi) * Math.sin(theta);
+        const z = c * Math.cos(theta);
 
         target.set(x, y, z);
     }
