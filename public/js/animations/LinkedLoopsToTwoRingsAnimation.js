@@ -7,7 +7,7 @@ import { MathHelper } from "../utility/MathHelper.js";
     'Topology Riddles': https://www.youtube.com/watch?v=H8qwqGjOlSE 
 */
 
-export class HookedLoopsToTwoRingsAnimation extends Animation
+export class LinkedLoopsToTwoRingsAnimation extends Animation
 {
     /*
         Constructor of the class will pass the scene to class field.
@@ -68,44 +68,49 @@ export class HookedLoopsToTwoRingsAnimation extends Animation
     {
         if(this.running)
         {
-            if(this.counters[0] < 20)
+            if(this.counters[0] == 0)
             {
                 this.stepBlowToroid();
                 this.drawStaticLoops();
                 this.currentAnimationStep++;
-                this.addStepDescription("At the beginning we want to blow a ball to cover bottom loop element and enable further unhooking of top rings. Please, notice that we are\
-                are not gluing anything in this operation, because paradoxically the space between hooked loops and bottom loop cannot be considered as a hole. Stay there longer if needed,\
-                since understanding of this operation is crucial to understand homeomorphism presented in that animation.");
+                this.addStepDescription("In this 3D animation we show that the two loops chained together, are actually topologically equivalent to two not linked loops.");
+            }
+            else if(this.counters[0] < 20)
+            {
+                this.stepBlowToroid();
+                this.drawStaticLoops();
+                this.currentAnimationStep++;
+                this.addStepDescription("The key part of the transformation is to blow the bottom element linking the chained loops. Notice, that we are not gluing anything during this operation, we are just\
+                 modifying the common surface of the loops in a continous manner. You may want to explore that step in detail, as it is crucial to understand the homeomorphism presented in this animation.");
             }
 
             else if(this.counters[1] < 10)
             {
                 this.stepMoveLoopBeforeUnhooking();
                 this.currentAnimationStep++;
-                this.addStepDescription("Now we may move one of hooked loops using circular motion to prepare before resolving them totally.");
+                this.addStepDescription("Now, we can freely move the loops on the surface of the big ball, without tearing the surface or making holes.");
             }
 
             else if(this.counters[2] < 20)
             {
                 this.stepUnhookLoops();
                 this.currentAnimationStep++;
-                this.addStepDescription("In those steps, we are moving both loops using circular movement to unhook them withouth gluing anything accidentally.");
+                this.addStepDescription("We move both half-loops using a circular movement to unlink them.");
             }
 
             else if(this.counters[3] < 20)
             {
                 this.stepShrinkSphereMoveLoops();
                 this.currentAnimationStep++;
-                this.addStepDescription("Next steps are to shrink ball. Please, notice that loops cannot be unjoined anyhow from the ball until they connect and ball shrinks nearly completely.");
+                this.addStepDescription("Notice that loops cannot be unjoined anyhow from the ball until they connect and ball shrinks nearly completely.");
             }
 
             else if(this.counters[4] < 20)
             {
                 this.stepFinalizeLoopsRotation();
                 this.currentAnimationStep++;
-                this.addStepDescription("Finally, let's move both rings without tearing them off to make them stay in same rotation. Ball is completely disappearing.\
-                 Notice that we havent done any 'topologically illegal'\
-                operation to achieve object which is obviously genus-2.")
+                this.addStepDescription("Finally, the ball is completely disappearing leaving the two toruses glued together.\
+                Thus, we obtained a genus-2 object (with just two holes) using only continous transformations.")
             }
         }
     }

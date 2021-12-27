@@ -1,4 +1,4 @@
-import { HookedLoopsToTwoRingsAnimation } from "./animations/HookedLoopsToTwoRingsAnimation.js";
+import { LinkedLoopsToTwoRingsAnimation } from "./animations/LinkedLoopsToTwoRingsAnimation.js";
 import { MoveOnStrip } from "./animations/MoveOnStrip.js";
 import { SceneController } from "./SceneController.js";
 
@@ -13,6 +13,7 @@ export class ObjectLoader
         this.objects = [];
         this.material = new THREE.MeshPhongMaterial({color: 0x0000ff});
         this.material.side = THREE.DoubleSide;
+        this.mobiusAnimation = null;
         this.animation = null;
     }
 
@@ -37,7 +38,7 @@ export class ObjectLoader
         
         this.addObject(geometry);
    
-        this.addDescription('TORUS is basic object for topological discussion. It is obviously genus-1. Sometimes all genus-1 geometries (or at least those which are loop-like) are reffered as toruses.')
+        this.addDescription('TORUS is one of the most basic objects in topology. It is of genus-1 (has one hole). Sometimes all genus-1 geometries are referred to as toruses, as they can be deformed to a torus.')
     }
 
     mugLoader()
@@ -54,13 +55,12 @@ export class ObjectLoader
         this.objects[0].rotation.z = Math.PI / 2;
         this.objects[2].position.y -= 3;
 
-        this.addDescription('MUG is topologically equivalent to TORUS, therefore it must be genus-1. MUG has only one hole: between handle and cylinder-like part of mug. MUG\'s interior is\
-         not a hole but just a dimple. It is not straightforward at the very beginning, but there is a dedicated animation to prove homeomorphism between TORUS and MUG.')
+        this.addDescription('A MUG is topologically equivalent to TORUS (as shown in the "Torus to Mug" 3D animation), therefore it is of genus-1. MUG has only one hole: between the handle and the cylinder-like part of the mug. MUG\'s interior is not a hole but just a dimple.')
     }
 
     loopsLoader()
     {
-        const loopsAnimation = new HookedLoopsToTwoRingsAnimation(this.scene);
+        const loopsAnimation = new LinkedLoopsToTwoRingsAnimation(this.scene);
 
         loopsAnimation.color = this.material.color;
 
@@ -88,7 +88,7 @@ export class ObjectLoader
 
         this.animation = loopsAnimation;
 
-        this.addDescription("HOOKED LOOPS shown above are example of genus-2 object. To visualise this fact one may watch animation showing changing HOOKED LOOPS to DOUBLE TORUS")
+        this.addDescription("LINKED LOOPS are example of a genus-2 object. To demonstrate this fact watch the 3D animation showing changing LINKED LOOPS to a DOUBLE TORUS")
     }
 
     mobiusStripLoader()
@@ -102,12 +102,13 @@ export class ObjectLoader
         const material = new THREE.MeshPhongMaterial( {color: 0xff0000} );
         material.side = THREE.DoubleSide;
 
-        const animation = new MoveOnStrip(this.scene);
+        this.mobiusAnimation = new MoveOnStrip(this.scene);
         
-        this.sceneController.loadAnimation(animation);
-        this.sceneController.startAnimation(100);
+        this.sceneController.loadAnimation(this.mobiusAnimation);
+        this.sceneController.startAnimation(60);
 
-        this.addDescription('MOBIUS STRIP is genus-1 object. Its specific feature is beign one-sided. Take a look at the animated ball. It goes through the surface of strip continously and is able to return to the same point with a simple loop.')
+        this.addDescription('MÖBIUS STRIP is a genus-1 object, whose specific feature is that it is a one-sided object. This can be demonstrated by a ball rolling continously over the surface of the strip.\
+        Notice, that the ball appears on both sides of the strip.')
     }
 
     doubleTorusLoader()
@@ -121,7 +122,7 @@ export class ObjectLoader
     
         this.addDescription()
 
-        this.addDescription('DOUBLE TORUS is just built from two toruses.')
+        this.addDescription('DOUBLE TORUS is just built from two toruses glued together.')
     }
 
     kleinBottleLoader()
@@ -130,8 +131,8 @@ export class ObjectLoader
         
         this.addObject(geometry);
 
-        this.addDescription('KLEIN\'S BOTTLE is the most complex object displayed in the application. It is one-sided and might be understood as two MOBIUS STRIPS glued togheter. Object shown\
-         above is in fact a projection of KLEIN\'S BOTTLE into 3-dimensional space')
+        this.addDescription('KLEIN\'S BOTTLE is an example of a more complicated topological object. It is a genus-2\
+        one-sided object and might be understood as two mirrored MÖBIUS STRIPS glued togheter. Object shown above is in fact a projection of KLEIN\'S BOTTLE into 3-dimensional space.')
     }
 
     addObject(geometry, alternativeMaterial=null)
