@@ -55,17 +55,11 @@ body
 
 .carousel-item
 {
-    /*margin-left: 5%;
-    margin-top: 6%;
-    */
     color: white !important;
 }
 
 .carousel-item>a
 {
-    /*display: block;
-    background-position: center center;
-    background-size: cover;*/
     width: 100%;
     height: auto;
     border: 1px solid #ddd;
