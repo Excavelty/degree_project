@@ -1,6 +1,6 @@
 import {Animation} from './Animation.js'
 
-export class MoveOnStrip extends Animation 
+export class MoveOnMobiusStrip extends Animation 
 {
         /*
         Constructor of the class will pass the scene to class field.

@@ -1,5 +1,5 @@
 import { LinkedLoopsToTwoRingsAnimation } from "./animations/LinkedLoopsToTwoRingsAnimation.js";
-import { MoveOnStrip } from "./animations/MoveOnStrip.js";
+import { MoveOnMobiusStrip } from "./animations/MoveOnMobiusStrip.js";
 import { SceneController } from "./SceneController.js";
 
 export class ObjectLoader
@@ -102,7 +102,7 @@ export class ObjectLoader
         const material = new THREE.MeshPhongMaterial( {color: 0xff0000} );
         material.side = THREE.DoubleSide;
 
-        this.mobiusAnimation = new MoveOnStrip(this.scene);
+        this.mobiusAnimation = new MoveOnMobiusStrip(this.scene);
         
         this.sceneController.loadAnimation(this.mobiusAnimation);
         this.sceneController.startAnimation(60);

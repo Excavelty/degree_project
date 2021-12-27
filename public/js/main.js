@@ -44,7 +44,7 @@ const urlBasedAnimation = function(scene) {
 	switch(name)
 	{
 		case 'torus-to-mug': animation = new TorusToMugAnimation(scene); break;
-		case 'resolve-hooked-loops': animation = new LinkedLoopsToTwoRingsAnimation(scene); break; 
+		case 'linked-loops': animation = new LinkedLoopsToTwoRingsAnimation(scene); break; 
 		case 'boat-to-torus': animation = new BoatToTorusAnimation(scene); break;
 		default: alert("Animation was not found, please provide proper URL");
 	}
